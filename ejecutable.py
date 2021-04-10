@@ -1,4 +1,6 @@
 def expresion():
+    print("Ingrese un Valor  para calcular rango")
+    print("")
     number = input()
     cal=(pow(3,(int(number))))-1
     return cal
@@ -6,58 +8,75 @@ def expresion():
 list_ent = range (0,((expresion()+1)))
 
 
-def verificar_existente(lista,numeros):
-    for n3 in lista:
-        for n4 in n3:
-            if n4 == numeros:
+def verificar_existente(lista, numeros):
+
+    for i in lista:
+        for j in i:
+            if j == numeros:
                 return True
     return False
 
-def verificar_next(lista):
+def verificar_condicion_1(numbers):
+    #Se verifica si el grupo de numeros ternarios cuenta con el numero 1
+    if numbers[0] == 1 or numbers[1] == 1:
+        return True
+    else:
+        return False
 
-    list_numbers_ter_verf = []
-    for n in lista:
-        index_n = lista.index(n)
-        if n[0] == 1 or n[1] == 1:
-            if not(verificar_existente(list_numbers_ter_verf, n)):
-                list_numbers_group = []
-                list_numbers_group.append(n)
-                for n2 in lista:
-                    if lista.index(n2) > index_n:
-                        if n2[0] == 1 or n2[1] == 1:
-                            if not(verificar_existente(list_numbers_ter_verf,n2)):
-                                list_numbers_group.append(n2)
+
+def lista_agrupados(lista):
+
+    lista_numeros = []
+
+    for numeros in lista:
+        if verificar_condicion_1(numeros):
+            if (verificar_existente(lista_numeros, numeros)):
+                continue
+            else:
+                lista_condicion_2 = []
+                lista_condicion_2.append(numeros)
+                for numeros_condicion_2 in lista:
+                    if lista.index(numeros_condicion_2) > lista.index(numeros):
+                        if verificar_condicion_1(numeros_condicion_2):
+                            if (verificar_existente(lista_numeros, numeros_condicion_2)):
+                                pass
+                            else:
+                                lista_condicion_2.append(numeros_condicion_2)
                         else:
                             break
-            else:
-                continue
-            list_numbers_ter_verf.append(list_numbers_group)
+            lista_numeros.append(lista_condicion_2)
         else:
-            list_numbers_ter_verf.append(n)
-    return list_numbers_ter_verf
+            lista_numeros.append(numeros)
+    return lista_numeros
 
 def cal_ternario():
     list_number_ter = []
 
-    for numbers in list_ent:
-        cociente = numbers / 3
-        resto = numbers % 3
+    for numeros in list_ent:
+        cociente = numeros / 3
+        resto = numeros % 3
         tuple_number_ter = (int(cociente),int(resto))
         list_number_ter.append(tuple_number_ter)
 
     return list_number_ter
 
 
-def orden(lista):
-    for number in lista:
-        for number_2 in number:
-            if number_2 != 2:
-                return 3
-            else:
-                return 1
+def numero_enGrupos(lista):
 
-verificar_next(cal_ternario())
-print(orden(verificar_next(cal_ternario())))
+    lista_enGrupos = []
+    for numeros in lista:
+        if type(numeros) == tuple:
+            lista_enGrupos.append(1)
+        if type(numeros) == list:
+            lista_enGrupos.append(len(numeros))
+
+    return lista_enGrupos
+
+print("Lista de numeros ternarios agrupados")
+print(lista_agrupados(cal_ternario()))
+print("")
+print("Lista de numeros agrupados por tamaño")
+print(numero_enGrupos(lista_agrupados(cal_ternario())))
 
 
 
